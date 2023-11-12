@@ -55,15 +55,16 @@ The three methods (`__init__`, `controls()`, `layout()`) are responsible for cre
 Inherit `fletFlowApp` app to create your app class. Register your views inside `views()` method. Create an object of your app class. Run your app. This is super simple!
 
 ```python
+import flet as ft
 from fletFlow import fletFlowApp, fletFlowView
 
-from views import ExampleView
+from views import ExampleView # import all of your views
 
 class App(fletFlowApp):
     def __init__(self, title=None, debug=False):
         super().__init__(title, debug)
     
-    def views(self):
+    def views(self, page:ft.Page):
         # register views here with route 
         self.register_view("/", ExampleView)
     
@@ -78,6 +79,8 @@ app = App(title="Example")
 app.run()
 
 ```
+Run the app script. You app is ready for the moon!
+
 For enabling debug mode:
 ```python
 app = App(title="Example", debug=True)
