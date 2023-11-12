@@ -5,7 +5,7 @@ import flet as ft
 from fletFlow.views import fletFlowView
 
 
-class FletFlowApp:
+class fletFlowApp:
     """Main App Class for FletFlow"""
     def __init__(self, title=None, debug=False) -> None:
         self.title = title

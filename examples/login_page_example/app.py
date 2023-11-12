@@ -1,12 +1,12 @@
 import flet as ft
-from fletFlow import FletFlowApp
+from fletFlow import fletFlowApp
 
 from login_view import LoginView
 from registration_view import RegisterView
 from app_view import MainAppView
 
 
-class App(FletFlowApp):
+class App(fletFlowApp):
     def __init__(self, title=None, debug=False) -> None:
         super().__init__(title, debug)
     
