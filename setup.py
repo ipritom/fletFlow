@@ -10,7 +10,7 @@ setup(
     author='Pritom Mojumder',
     author_email='pritom.blue2@gmail.com',
     license='MIT',
-    packages=['fletSDP'],
+    packages=['fletFlow'],
     install_requires=[
         "flet>=0.11.0",
     ],
