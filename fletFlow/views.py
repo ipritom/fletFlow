@@ -7,6 +7,10 @@ class fletFlowView:
         FletView Parameters
         """
         self.page = page
+        self.__has_redirect_logic = False
+        # check redirect
+        if hasattr(self, "redirect"):
+            self.__has_redirect_logic = True
 
     @abstractmethod
     def layout(self):
@@ -23,9 +27,9 @@ class fletFlowView:
         '''
         pass
     
-    def __call__(self, route, verbose=True):
-        if verbose:
-            print("--- called", self.__class__.__name__)
-            
+    
+    def __call__(self, route):    
         return ft.View(route=route, controls=[self.layout()])
 
+    def has_redirect(self):
+        return self.__has_redirect_logic
