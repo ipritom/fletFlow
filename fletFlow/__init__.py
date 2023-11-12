@@ -1,2 +1,2 @@
-from fletFlow.app import FletFlowApp
+from fletFlow.app import fletFlowApp
 from fletFlow.views import fletFlowView
