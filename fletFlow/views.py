@@ -28,8 +28,12 @@ class fletFlowView:
         pass
     
     
-    def __call__(self, route):    
-        return ft.View(route=route, controls=[self.layout()])
+    def __call__(self, route):
+        load_controls = self.layout()
+        if isinstance(load_controls, list):
+            return ft.View(route=route, controls=self.layout())
+        else:
+            return ft.View(route=route, controls=[self.layout()])
 
     def has_redirect(self):
         return self.__has_redirect_logic
