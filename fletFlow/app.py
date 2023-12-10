@@ -24,6 +24,8 @@ class fletFlowApp:
             "redirected" : None,
             "actual" : None,
         }
+        if self.debug:
+            self.__debug("--- STARTING APP ---")
 
 
     @abstractmethod
@@ -47,9 +49,12 @@ class fletFlowApp:
         """Check if the route is registered"""
         return route in self.views_map
 
-    def __debug(self, msg:str, param:any):
+    def __debug(self, msg:str, param:any=None):
         if self.debug:
-            print(f"fletFlow : {datetime.datetime.now()} | {msg} | {param}")
+            if param is None:
+                 print(f"fletFlow : {datetime.datetime.now()} | {msg}")
+            else:
+                print(f"fletFlow : {datetime.datetime.now()} | {msg} | {'' if param is None else param}")
 
     def __reset_trace_change_route(self):
         self.__trace_change_route = {
