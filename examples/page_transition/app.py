@@ -1,11 +1,11 @@
 import flet as ft
-from fletFlow import FletFlowApp, fletFlowView
+from fletFlow import fletFlowApp, fletFlowView
 
 from dark_page import DarkView
 from light_page import LightView
 
 
-class App(FletFlowApp):
+class App(fletFlowApp):
     def __init__(self, title=None, debug=False):
         super().__init__(title, debug)
         

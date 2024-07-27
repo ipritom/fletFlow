@@ -63,45 +63,85 @@ class fletFlowApp:
             "redirected" : None,
             "actual" : None,
         }
-
     def on_route_change_handler(self, route:ft.RouteChangeEvent):
         """Handle page route changing"""
-        self.__reset_trace_change_route()
-        self.__trace_change_route["pre"] = self.page.views[-1].route
-        # validate route
-        if not self.__is_valid_route(route.route):
-            return
+        self.__debug("current route", self.page.route)
 
-        flow_route = route.route
-        self.__trace_change_route["new"] = flow_route
+        previous_route = self.page.views[-1].route
+        new_route = route.route
+
+        # validate requested route
+        if not self.__is_valid_route(route.route):
+            self.__debug("invalid route",route.route)
+            self.page.route = previous_route
+            return
+        
+      
+        self.__debug("requested", new_route)
+
         # constructing the view object pointed by route
-        view_object: fletFlowView = self.views_map[flow_route](self.page)
+        view_object: fletFlowView = self.views_map[new_route](self.page)
 
         # check redirect
         if view_object.has_redirect():
             redirect_route = view_object.redirect()
+            
             if redirect_route is not None:
-                flow_route = redirect_route
-                self.__trace_change_route["redirected"] = flow_route
+                new_route = redirect_route
+                self.__debug("redirected to", new_route)
+
             # re-constructing the view object pointed by redirect route
-            view_object: fletFlowView = self.views_map[flow_route](self.page)
-    
-        self.__trace_change_route["actual"] = self.page.route
-        self.__debug("trace change of route", self.__trace_change_route)
-
-        # avoiding redundant trigger (pre==actual redirected route and page.route is same)
-        if self.__trace_change_route["pre"]==self.__trace_change_route["actual"]:
-            self.__debug("bypassing redundant view change", "")
-            return
-
+            view_object: fletFlowView = self.views_map[new_route](self.page)
+        
         # clear the last view
         self.page.views.clear()
         # rendering the new view on the page
         self.__debug("calling view", view_object.__class__.__name__)
         view_object.controls()
-        self.page.views.append(view_object(flow_route))
-        self.page.route = flow_route # NOTE: cause redundant trigger on change handler
+        self.page.views.append(view_object(new_route))
+        self.page.route = new_route # NOTE: cause redundant trigger on change handler
+        # self.__trace_change_route["actual"] = flow_route # NOTE: Solving BUG
+        self.__debug("set to page", self.page.route)
         self.page.update()
+
+    # def on_route_change_handler(self, route:ft.RouteChangeEvent):
+    #     """Handle page route changing"""
+    #     self.__reset_trace_change_route()
+    #     self.__trace_change_route["pre"] = self.page.views[-1].route
+    #     # validate route
+    #     if not self.__is_valid_route(route.route):
+    #         return
+
+    #     flow_route = route.route
+    #     self.__trace_change_route["new"] = flow_route
+    #     # constructing the view object pointed by route
+    #     view_object: fletFlowView = self.views_map[flow_route](self.page)
+
+    #     # check redirect
+    #     if view_object.has_redirect():
+    #         redirect_route = view_object.redirect()
+    #         if redirect_route is not None:
+    #             flow_route = redirect_route
+    #             self.__trace_change_route["redirected"] = flow_route
+    #         # re-constructing the view object pointed by redirect route
+    #         view_object: fletFlowView = self.views_map[flow_route](self.page)
+    
+    #     self.__trace_change_route["actual"] = self.page.route
+    #     self.__debug("trace change of route", self.__trace_change_route)
+
+    #     # avoiding redundant trigger (pre==actual redirected route and page.route is same)
+    #     if self.__trace_change_route["pre"]==self.__trace_change_route["actual"]:
+    #         self.__debug("bypassing redundant view change", "")
+    #         return
+
+    #     # clear the last view
+    #     self.page.views.clear()
+    #     # rendering the new view on the page
+    #     self.__debug("calling view", view_object.__class__.__name__)
+    #     view_object.controls()
+    #     self.page.views.append(view_object(flow_route))
+    #     self.page.route = flow_route # NOTE: cause redundant trigger on change handler
+    #     self.page.update()
 
     def register_view(self, route:str=None, view_class:fletFlowView=None):
         """Register FletView object with corresponding route"""

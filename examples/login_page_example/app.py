@@ -28,7 +28,7 @@ class App(fletFlowApp):
         self.page.go("/")
         
     def run(self):
-        ft.app(target=self.main, port=59441, view=ft.WEB_BROWSER)
+        ft.app(target=self.main, view=ft.WEB_BROWSER)
 
 
 app = App(title="Flet Example", debug=True)
